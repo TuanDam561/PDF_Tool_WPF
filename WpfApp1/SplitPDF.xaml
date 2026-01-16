@@ -1,0 +1,139 @@
+﻿<Window x:Class="WpfApp1.SplitPDF"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        Title="Cắt PDF"
+        Width="1100"
+        Height="650"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F6F8">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ================= HEADER ================= -->
+        <StackPanel Margin="0,0,0,15">
+            <TextBlock Text="Cắt PDF"
+                       FontSize="26"
+                       FontWeight="Bold"
+                       Foreground="#E5322D"/>
+            <TextBlock Text="Xem trước và tách PDF theo số trang"
+                       FontSize="14"
+                       Foreground="#666"/>
+        </StackPanel>
+
+        <!-- ================= BODY ================= -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="320"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ===== LEFT: PDF PREVIEW ===== -->
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="12"
+                    Padding="12"
+                    Margin="0,0,15,0">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- INFO -->
+                    <StackPanel Margin="0,0,0,10">
+                        <TextBlock Text="Xem trước PDF"
+                                   FontWeight="Bold"
+                                   FontSize="14"/>
+
+                        <TextBlock x:Name="PdfFileNameText"
+                                   Foreground="#333"
+                                   Margin="0,4,0,0"/>
+
+                        <TextBlock x:Name="PdfPageCountText"
+                                   Foreground="#666"/>
+                    </StackPanel>
+
+                    <!-- PDF VIEWER -->
+                    <Border Grid.Row="1"
+                            BorderBrush="#DDD"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            ClipToBounds="True">
+
+                        <wv2:WebView2 x:Name="PdfViewer"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ===== RIGHT: ACTION ===== -->
+            <StackPanel Grid.Column="1">
+
+                <!-- SELECT PDF -->
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="15"
+                        Margin="0,0,0,15">
+
+                    <StackPanel>
+                        <Button Content="📄 Chọn file PDF"
+                                Height="40"
+                                Click="SelectPdf_Click"/>
+
+                        <TextBlock Text="Trang cần cắt"
+                                   Margin="0,12,0,4"
+                                   FontWeight="Bold"/>
+
+                        <TextBlock Text="Ví dụ: 1 | 1-3 | 1-3,5,7-10"
+                                   Foreground="#666"
+                                   FontSize="12"
+                                   Margin="0,0,0,4"/>
+
+                        <TextBox x:Name="PageInput"
+                                 Height="34"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- SPLIT -->
+                <Border Background="White"
+                        CornerRadius="12"
+                        Padding="15">
+
+                    <Button x:Name="SplitButton"
+                            Content="✂️ Cắt PDF"
+                            Height="46"
+                            Background="#E5322D"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Click="Split_Click"/>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+
+        <!-- ================= FOOTER ================= -->
+        <StackPanel Grid.Row="2"
+                    Margin="0,12,0,0">
+
+            <ProgressBar x:Name="SplitProgress"
+                         Height="16"
+                         Visibility="Collapsed"/>
+
+            <TextBlock x:Name="StatusText"
+                       Margin="0,6,0,0"
+                       Foreground="#666"
+                       Visibility="Collapsed"/>
+
+            <TextBlock Text="PDF Tool • Split PDF"
+                       Foreground="#888"
+                       HorizontalAlignment="Right"
+                       Margin="0,6,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
