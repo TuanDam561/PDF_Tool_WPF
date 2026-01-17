@@ -40,7 +40,14 @@ namespace WpfApp1
             window.ShowDialog();
             this.Show();
         }
-
+        private void EncryptPdf_Click(object sender,System.Windows.Input.MouseButtonEventArgs e)
+        {
+            EncryptPdfWindow window = new EncryptPdfWindow();
+            this.Hide();
+            window.Owner = this;
+            window.ShowDialog();
+            this.Show();
+        }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();

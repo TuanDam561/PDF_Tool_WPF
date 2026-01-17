@@ -11,12 +11,64 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Tool\qpdf\concrt140.dll" />
+    <None Remove="Tool\qpdf\fix-qdf.exe" />
+    <None Remove="Tool\qpdf\msvcp140.dll" />
+    <None Remove="Tool\qpdf\msvcp140_1.dll" />
+    <None Remove="Tool\qpdf\msvcp140_2.dll" />
+    <None Remove="Tool\qpdf\msvcp140_atomic_wait.dll" />
+    <None Remove="Tool\qpdf\msvcp140_codecvt_ids.dll" />
+    <None Remove="Tool\qpdf\qpdf.exe" />
+    <None Remove="Tool\qpdf\qpdf30.dll" />
+    <None Remove="Tool\qpdf\vcruntime140.dll" />
+    <None Remove="Tool\qpdf\vcruntime140_1.dll" />
+    <None Remove="Tool\qpdf\zlib-flate.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="faviconNew.ico" />
+    <Content Include="Tool\qpdf\concrt140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\fix-qdf.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\msvcp140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\msvcp140_1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\msvcp140_2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\msvcp140_atomic_wait.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\msvcp140_codecvt_ids.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\qpdf.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\qpdf30.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\vcruntime140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\vcruntime140_1.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tool\qpdf\zlib-flate.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.2" />
   </ItemGroup>
 
 </Project>

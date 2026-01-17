@@ -88,8 +88,9 @@
                 </StackPanel>
             </Border>
 
-            <!-- SPLIT PDF (để sẵn) -->
-            <Border Style="{StaticResource ToolCardStyle}">
+            <!-- Encrypt PDF -->
+            <Border Style="{StaticResource ToolCardStyle}"
+                     MouseLeftButtonUp="EncryptPdf_Click">
                 <StackPanel Margin="0,30">
                     <TextBlock Text="🔒"
                    FontSize="40"
