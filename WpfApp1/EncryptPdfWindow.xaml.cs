@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using WpfApp1.Functions;
+
 
 namespace WpfApp1
 {
@@ -37,21 +39,19 @@ namespace WpfApp1
         // =============================
         private void SelectPdf_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog
-            {
-                Filter = "PDF files (*.pdf)|*.pdf",
-                Multiselect = MultiFileCheckBox.IsChecked == true
-            };
+            _selectedFiles = FilePicker.Pick(MultiFileCheckBox.IsChecked == true);
 
-            if (dialog.ShowDialog() == true)
+            if (_selectedFiles.Count == 0)
             {
-                _selectedFiles = dialog.FileNames.ToList();
-
-                PdfInfoTextBox.Text = _selectedFiles.Count == 1
-                    ? Path.GetFileName(_selectedFiles[0])
-                    : $"Đã chọn {_selectedFiles.Count} file PDF";
+                PdfInfoTextBox.Text = "";
+                return;
             }
+
+            PdfInfoTextBox.Text = _selectedFiles.Count == 1
+                ? Path.GetFileName(_selectedFiles[0])
+                : $"Đã chọn {_selectedFiles.Count} file PDF";
         }
+
 
         // =============================
         // CLICK MÃ HÓA

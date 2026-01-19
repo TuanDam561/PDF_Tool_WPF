@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WpfApp1.Model;
 using PdfItem = WpfApp1.Model.PdfItem;
+using WpfApp1.Functions;
 
 namespace WpfApp1
 {
@@ -17,6 +18,7 @@ namespace WpfApp1
     {
         private ObservableCollection<PdfItem> pdfItems
             = new ObservableCollection<PdfItem>();
+        private List<string> _selectedFiles = new();
 
         public MergePdfWindow()
         {
@@ -29,27 +31,10 @@ namespace WpfApp1
         // =========================
         private void AddPdf_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog
-            {
-                Filter = "PDF files (*.pdf)|*.pdf",
-                Multiselect = true
-            };
-
-            if (dialog.ShowDialog() == true)
-            {
-                foreach (var file in dialog.FileNames)
-                {
-                    if (!pdfItems.Any(x => x.FullPath == file))
-                    {
-                        pdfItems.Add(new PdfItem
-                        {
-                            FileName = Path.GetFileName(file),
-                            FullPath = file
-                        });
-                    }
-                }
-            }
+            var files = FilePicker.Pick(true);
+            FilePicker.AddToCollection(files, pdfItems);
         }
+
 
         // =========================
         // KÉO THẢ FILE

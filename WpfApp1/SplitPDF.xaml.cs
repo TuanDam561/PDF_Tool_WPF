@@ -1,154 +1,4 @@
-﻿//using Microsoft.Win32;
-//using PdfSharp.Pdf;
-//using PdfSharp.Pdf.IO;
-//using System;
-//using System.Collections.Generic;
-//using System.IO;
-//using System.Linq;
-//using System.Threading;
-//using System.Windows;
-
-//namespace WpfApp1
-//{
-//    public partial class SplitPDF : Window
-//    {
-//        private string? _pdfPath;
-//        private int _totalPages;
-
-//        public SplitPDF()
-//        {
-//            InitializeComponent();
-//        }
-
-//        // 📄 Chọn PDF
-//        private void SelectPdf_Click(object sender, RoutedEventArgs e)
-//        {
-//            OpenFileDialog dlg = new OpenFileDialog
-//            {
-//                Filter = "PDF Files (*.pdf)|*.pdf"
-//            };
-
-//            if (dlg.ShowDialog() != true)
-//                return;
-
-//            _pdfPath = dlg.FileName;
-
-//            PdfDocument doc = PdfReader.Open(_pdfPath, PdfDocumentOpenMode.Import);
-//            _totalPages = doc.PageCount;
-
-//            PdfFileName.Text = Path.GetFileName(_pdfPath);
-//            PdfPageCount.Text = $"Tổng số trang: {_totalPages}";
-//        }
-
-//        // ✂️ Cắt PDF
-//        private async void Split_Click(object sender, RoutedEventArgs e)
-//        {
-//            if (_pdfPath == null)
-//            {
-//                MessageBox.Show("Chưa chọn file PDF!");
-//                return;
-//            }
-
-//            if (string.IsNullOrWhiteSpace(PageInput.Text))
-//            {
-//                MessageBox.Show("Chưa nhập trang cần cắt!");
-//                return;
-//            }
-
-//            SaveFileDialog saveDlg = new SaveFileDialog
-//            {
-//                Filter = "PDF Files (*.pdf)|*.pdf",
-//                FileName = "split.pdf"
-//            };
-
-//            if (saveDlg.ShowDialog() != true)
-//                return;
-
-//            // ✅ LẤY DỮ LIỆU UI TRƯỚC
-//            string pageInput = PageInput.Text;
-//            string pdfPath = _pdfPath;
-//            int totalPages = _totalPages;
-
-//            // ✅ UI update (UI thread)
-//            SplitButton.IsEnabled = false;
-//            SplitProgress.Visibility = Visibility.Visible;
-//            StatusText.Visibility = Visibility.Visible;
-//            SplitProgress.Value = 0;
-
-//            try
-//            {
-//                await Task.Run(() =>
-//                {
-//                    List<int> pages = ParsePages(pageInput);
-
-//                    PdfDocument inputDoc =
-//                        PdfReader.Open(pdfPath, PdfDocumentOpenMode.Import);
-//                    PdfDocument outputDoc = new PdfDocument();
-
-//                    int current = 0;
-
-//                    foreach (int page in pages)
-//                    {
-//                        if (page < 1 || page > totalPages)
-//                            continue;
-
-//                        outputDoc.AddPage(inputDoc.Pages[page - 1]);
-//                        current++;
-
-//                        Dispatcher.Invoke(() =>
-//                        {
-//                            StatusText.Text = $"Đang xử lý trang {page}";
-//                            SplitProgress.Value =
-//                                (double)current / pages.Count * 100;
-//                        });
-//                    }
-
-//                    outputDoc.Save(saveDlg.FileName);
-//                });
-
-//                MessageBox.Show("Cắt PDF thành công!");
-//            }
-//            catch (Exception ex)
-//            {
-//                MessageBox.Show(ex.Message, "Lỗi");
-//            }
-//            finally
-//            {
-//                SplitButton.IsEnabled = true;
-//                SplitProgress.Visibility = Visibility.Collapsed;
-//                StatusText.Visibility = Visibility.Collapsed;
-//            }
-//        }
-
-
-//        // 🔢 Parse "1-3,5,7-10"
-//        private List<int> ParsePages(string input)
-//        {
-//            HashSet<int> pages = new HashSet<int>();
-
-//            foreach (string part in input.Split(','))
-//            {
-//                if (part.Contains('-'))
-//                {
-//                    var range = part.Split('-');
-//                    int start = int.Parse(range[0]);
-//                    int end = int.Parse(range[1]);
-
-//                    for (int i = start; i <= end; i++)
-//                        pages.Add(i);
-//                }
-//                else
-//                {
-//                    pages.Add(int.Parse(part));
-//                }
-//            }
-
-//            return pages.OrderBy(p => p).ToList();
-//        }
-//    }
-//}
-
-
+﻿
 using Microsoft.Win32;
 using Microsoft.Web.WebView2.Wpf;
 using PdfSharp.Pdf;
@@ -159,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using WpfApp1.Functions;
 
 namespace WpfApp1
 {
@@ -177,15 +28,12 @@ namespace WpfApp1
         // =====================
         private async void SelectPdf_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Filter = "PDF files (*.pdf)|*.pdf"
-            };
+            var files = FilePicker.Pick(false); // chỉ chọn 1 file
 
-            if (dlg.ShowDialog() != true)
+            if (files.Count == 0)
                 return;
 
-            _pdfPath = dlg.FileName;
+            _pdfPath = files[0];
 
             // đọc số trang
             using (PdfDocument doc = PdfReader.Open(_pdfPath, PdfDocumentOpenMode.Import))
@@ -193,13 +41,14 @@ namespace WpfApp1
                 _pageCount = doc.PageCount;
             }
 
-            PdfFileNameText.Text = Path.GetFileName(_pdfPath);
+            PdfFileNameText.Text = $"Tên File: {Path.GetFileName(_pdfPath)}";
             PdfPageCountText.Text = $"Tổng số trang: {_pageCount}";
 
             // load preview
             await PdfViewer.EnsureCoreWebView2Async();
             PdfViewer.Source = new Uri(_pdfPath);
         }
+
 
         // =====================
         // Cắt PDF

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using WpfApp1.Model;
+using WpfApp1.Utils;
 
 namespace WpfApp1
 {
@@ -14,6 +15,8 @@ namespace WpfApp1
     {
         private List<WordItem> _wordFiles = new();
         private Point _dragStart;
+        string sofficePath = LibreOfficePath.GetSofficePath();
+
 
         public ConvertPDF()
         {
@@ -54,62 +57,7 @@ namespace WpfApp1
             }
         }
 
-        // 🔄 Convert Word → PDF (LibreOffice CLI)
-        //private void Convert_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (_wordFiles.Count == 0)
-        //    {
-        //        MessageBox.Show("Chưa có file Word nào!");
-        //        return;
-        //    }
-
-        //    SaveFileDialog folderDialog = new SaveFileDialog
-        //    {
-        //        Title = "Chọn thư mục xuất PDF",
-        //        Filter = "Folder|*.folder",
-        //        FileName = "select",
-        //        OverwritePrompt = false,
-        //        CheckPathExists = true
-        //    };
-
-        //    if (folderDialog.ShowDialog() != true)
-        //        return;
-
-        //    string outputFolder = Path.GetDirectoryName(folderDialog.FileName)!;
-
-        //    Thread convertThread = new Thread(() =>
-        //    {
-        //        try
-        //        {
-        //            string libreOfficePath = FindLibreOffice();
-
-        //            foreach (var item in _wordFiles)
-        //            {
-        //                ConvertWordToPdf(
-        //                    libreOfficePath,
-        //                    item.FullPath,
-        //                    outputFolder
-        //                );
-        //            }
-
-        //            Dispatcher.Invoke(() =>
-        //            {
-        //                MessageBox.Show("Chuyển đổi Word → PDF thành công!");
-        //            });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Dispatcher.Invoke(() =>
-        //            {
-        //                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            });
-        //        }
-        //    });
-
-        //    convertThread.Start();
-        //}
-
-
+      
         private void Convert_Click(object sender, RoutedEventArgs e)
         {
             if (_wordFiles.Count == 0)
@@ -142,7 +90,7 @@ namespace WpfApp1
             {
                 try
                 {
-                    string libreOfficePath = FindLibreOffice();
+                    string libreOfficePath = sofficePath;
                     int total = _wordFiles.Count;
                     int current = 0;
 
@@ -192,26 +140,6 @@ namespace WpfApp1
         }
 
 
-        // ==========================
-        // LibreOffice helper methods
-        // ==========================
-
-        private string FindLibreOffice()
-        {
-            string[] paths =
-            {
-                @"C:\Program Files\LibreOffice\program\soffice.exe",
-                @"C:\Program Files (x86)\LibreOffice\program\soffice.exe"
-            };
-
-            foreach (var path in paths)
-            {
-                if (File.Exists(path))
-                    return path;
-            }
-
-            throw new FileNotFoundException("Không tìm thấy LibreOffice. Vui lòng cài LibreOffice.");
-        }
 
         private void ConvertWordToPdf(string libreOfficePath, string inputFile, string outputFolder)
         {
