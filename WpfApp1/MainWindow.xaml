@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Tool" Height="500" Width="800">
+        Title="Tool" Height="550" Width="800">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,113 +24,155 @@
                        Foreground="#555"/>
         </StackPanel>
 
-        <!-- TOOL GRID -->
-        <UniformGrid Grid.Row="1"
-                     Columns="3"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Top"
-                     Margin="0,20,0,0">
+        <ScrollViewer Grid.Row="1"
+              VerticalScrollBarVisibility="Hidden"
+              HorizontalScrollBarVisibility="Disabled"
+              Margin="0,0,0,0">
+            <!-- TOOL GRID -->
+            <UniformGrid Grid.Row="1"
+                         Columns="3"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Top"
+                         Margin="0,20,0,0">
 
-            <!-- MERGE PDF -->
-            <Border Style="{StaticResource ToolCardStyle}"
-                    MouseLeftButtonUp="MergePdf_Click"
-                    ToolTip="Nối nhiều File PDF thành 1 File duy nhất">
-                <StackPanel Margin="0,30">
-                    <TextBlock Text="🔗"
-                               FontSize="40"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="Nối PDF"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="0,10,0,5"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="Gộp nhiều file PDF thành một"
-                               FontSize="13"
-                               Foreground="#666"
-                               TextAlignment="Center"/>
-                </StackPanel>
-            </Border>
+                <!-- MERGE PDF -->
+                <Border Style="{StaticResource ToolCardStyle}"
+                        MouseLeftButtonUp="MergePdf_Click"
+                        ToolTip="Nối nhiều File PDF thành 1 File duy nhất">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="🔗"
+                                   FontSize="40"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Nối PDF"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,5"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Gộp nhiều file PDF thành một"
+                                   FontSize="13"
+                                   Foreground="#666"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
 
-            <!-- DOC TO PDF -->
-            <Border Style="{StaticResource ToolCardStyle}"
-                    MouseLeftButtonUp="DocToPdf_Click"
-                    ToolTip="Chuyển đổi 1 hoặc nhiều file Word thành file PDF">
-                <StackPanel Margin="0,30">
-                    <TextBlock Text="📄"
-                               FontSize="40"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="DOC → PDF"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="0,10,0,5"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="Chuyển hàng loạt DOCX sang PDF"
-                               FontSize="13"
-                               Foreground="#666"
-                               TextAlignment="Center"/>
-                </StackPanel>
-            </Border>
+                <!-- DOC TO PDF -->
+                <Border Style="{StaticResource ToolCardStyle}"
+                        MouseLeftButtonUp="DocToPdf_Click"
+                        ToolTip="Chuyển đổi 1 hoặc nhiều file Word thành file PDF">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="📄"
+                                   FontSize="40"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="DOC → PDF"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,5"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Chuyển hàng loạt DOCX sang PDF"
+                                   FontSize="13"
+                                   Foreground="#666"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
 
-            <!-- SPLIT PDF (để sẵn) -->
-            <Border Style="{StaticResource ToolCardStyle}" 
-                    MouseLeftButtonUp="SplitPdf_Click"
-                    ToolTip="Tách File PDF 1 hoặc nhiều trang mong muốn">
-                <StackPanel Margin="0,30">
-                    <TextBlock Text="✂️"
-                               FontSize="40"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="Tách PDF"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="0,10,0,5"
-                               HorizontalAlignment="Center"/>
-                    <TextBlock Text="Tách PDF theo trang"
-                               FontSize="13"
-                               Foreground="#666"
-                               TextAlignment="Center"/>
-                </StackPanel>
-            </Border>
+                <!-- SPLIT PDF (để sẵn) -->
+                <Border Style="{StaticResource ToolCardStyle}" 
+                        MouseLeftButtonUp="SplitPdf_Click"
+                        ToolTip="Tách File PDF 1 hoặc nhiều trang mong muốn">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="✂️"
+                                   FontSize="40"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Tách PDF"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,5"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Tách PDF theo trang"
+                                   FontSize="13"
+                                   Foreground="#666"
+                                   TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
 
-            <!-- Encrypt PDF -->
-            <Border Style="{StaticResource ToolCardStyle}"
-                     MouseLeftButtonUp="EncryptPdf_Click"
-                    ToolTip="Mã hóa và phân quyền cho một hoặc nhiều File PDF">
-                <StackPanel Margin="0,30">
-                    <TextBlock Text="🔒"
-                   FontSize="40"
-                   HorizontalAlignment="Center"/>
-                    <TextBlock Text="Mã hóa và phân quyền PDF"                               
-                   FontSize="16"
-                   FontWeight="Bold"
-                   Margin="0,10,0,5"
-                   HorizontalAlignment="Center"/>
-                    <TextBlock Text="Mã hóa và phân quyền PDF"
-                   FontSize="13"
-                   Foreground="#666"
-                   TextAlignment="Center"/>
-                </StackPanel>
-            </Border>
+                <!-- Encrypt PDF -->
+                <Border Style="{StaticResource ToolCardStyle}"
+                         MouseLeftButtonUp="EncryptPdf_Click"
+                        ToolTip="Mã hóa và phân quyền cho một hoặc nhiều File PDF">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="🔒"
+                       FontSize="40"
+                       HorizontalAlignment="Center"/>
+                        <TextBlock Text="Mã hóa và phân quyền PDF"                               
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Margin="0,10,0,5"
+                       HorizontalAlignment="Center"/>
+                        <TextBlock Text="Mã hóa và phân quyền PDF"
+                       FontSize="13"
+                       Foreground="#666"
+                       TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
 
-            <!-- Encrypt PDF -->
-            <Border Style="{StaticResource ToolCardStyle}"
-                MouseLeftButtonUp="ComparePdf_Click"
-                ToolTip="So sánh 2 FIle PDF với nhau">
-                        <StackPanel Margin="0,30">
-                            <TextBlock Text="⚖️"
-                FontSize="40"
-                HorizontalAlignment="Center"/>
-                            <TextBlock Text="So sánh PDF"                               
-                FontSize="16"
-                FontWeight="Bold"
-                Margin="0,10,0,5"
-                HorizontalAlignment="Center"/>
+                <!-- Compare PDF -->
+                <Border Style="{StaticResource ToolCardStyle}"
+                    MouseLeftButtonUp="ComparePdf_Click"
+                    ToolTip="So sánh 2 FIle PDF với nhau">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="⚖️"
+                            FontSize="40"
+                            HorizontalAlignment="Center"/>
+                        <TextBlock Text="So sánh PDF"                               
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Margin="0,10,0,5"
+                            HorizontalAlignment="Center"/>
                         <TextBlock Text="So sánh File PDF với nhau"
-                FontSize="13"
-                Foreground="#666"
-                TextAlignment="Center"/>    
-                </StackPanel>
-            </Border>
-        </UniformGrid>
+                            FontSize="13"
+                            Foreground="#666"
+                            TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <!--Excel To PDF -->
+                <Border Style="{StaticResource ToolCardStyle}"
+                    MouseLeftButtonUp="ExcelToPdf_Click"
+                    ToolTip="Chuyển Excel thành PDF">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="📊"
+                            FontSize="40"
+                            HorizontalAlignment="Center"/>
+                        <TextBlock Text="Excel → PDF"                               
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Margin="0,10,0,5"
+                            HorizontalAlignment="Center"/>
+                        <TextBlock Text="Chuyển hàng loạt Excel sang PDF"
+                            FontSize="13"
+                            Foreground="#666"
+                            TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <!--Edit PDF-->
+                <Border Style="{StaticResource ToolCardStyle}"
+                     MouseLeftButtonUp="ComparePdf_Click"
+                     ToolTip="Sửa xoay dọc xoay ngang và sắp xếp lại trang PDF">
+                    <StackPanel Margin="0,30">
+                        <TextBlock Text="🔨"
+                             FontSize="40"
+                             HorizontalAlignment="Center"/>
+                        <TextBlock Text="Chỉnh sửa PDF"                               
+                             FontSize="16"
+                             FontWeight="Bold"
+                             Margin="0,10,0,5"
+                             HorizontalAlignment="Center"/>
+                        <TextBlock Text="Trình chỉnh sửa File PDF"
+                             FontSize="13"
+                             Foreground="#666"
+                             TextAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+        </ScrollViewer>
     </Grid>
-    
 </Window>

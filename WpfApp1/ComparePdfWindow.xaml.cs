@@ -69,8 +69,8 @@ namespace WpfApp1
             var sb = new StringBuilder();
 
             sb.AppendLine(detail.IsHashSame
-                ? "• Hash: giống"
-                : "• Hash: khác");
+                ? "• Mã PDF : giống"
+                : "• Mã PDF : khác");
 
             sb.AppendLine(detail.IsPageCountSame
                 ? $"• Số trang: giống ({detail.PageCountA})"
