@@ -14,7 +14,7 @@
 
         <!-- HEADER -->
         <StackPanel>
-            <TextBlock Text="PDF TOOL"
+            <TextBlock Text="DOCUMENT TOOL"
                        FontSize="28"
                        FontWeight="Bold"
                        Foreground="#E5322D"/>
@@ -33,7 +33,8 @@
 
             <!-- MERGE PDF -->
             <Border Style="{StaticResource ToolCardStyle}"
-                    MouseLeftButtonUp="MergePdf_Click">
+                    MouseLeftButtonUp="MergePdf_Click"
+                    ToolTip="Nối nhiều File PDF thành 1 File duy nhất">
                 <StackPanel Margin="0,30">
                     <TextBlock Text="🔗"
                                FontSize="40"
@@ -52,7 +53,8 @@
 
             <!-- DOC TO PDF -->
             <Border Style="{StaticResource ToolCardStyle}"
-                    MouseLeftButtonUp="DocToPdf_Click">
+                    MouseLeftButtonUp="DocToPdf_Click"
+                    ToolTip="Chuyển đổi 1 hoặc nhiều file Word thành file PDF">
                 <StackPanel Margin="0,30">
                     <TextBlock Text="📄"
                                FontSize="40"
@@ -71,7 +73,8 @@
 
             <!-- SPLIT PDF (để sẵn) -->
             <Border Style="{StaticResource ToolCardStyle}" 
-                    MouseLeftButtonUp="SplitPdf_Click">
+                    MouseLeftButtonUp="SplitPdf_Click"
+                    ToolTip="Tách File PDF 1 hoặc nhiều trang mong muốn">
                 <StackPanel Margin="0,30">
                     <TextBlock Text="✂️"
                                FontSize="40"
@@ -90,7 +93,8 @@
 
             <!-- Encrypt PDF -->
             <Border Style="{StaticResource ToolCardStyle}"
-                     MouseLeftButtonUp="EncryptPdf_Click">
+                     MouseLeftButtonUp="EncryptPdf_Click"
+                    ToolTip="Mã hóa và phân quyền cho một hoặc nhiều File PDF">
                 <StackPanel Margin="0,30">
                     <TextBlock Text="🔒"
                    FontSize="40"
@@ -107,6 +111,25 @@
                 </StackPanel>
             </Border>
 
+            <!-- Encrypt PDF -->
+            <Border Style="{StaticResource ToolCardStyle}"
+                MouseLeftButtonUp="ComparePdf_Click"
+                ToolTip="So sánh 2 FIle PDF với nhau">
+                        <StackPanel Margin="0,30">
+                            <TextBlock Text="⚖️"
+                FontSize="40"
+                HorizontalAlignment="Center"/>
+                            <TextBlock Text="So sánh PDF"                               
+                FontSize="16"
+                FontWeight="Bold"
+                Margin="0,10,0,5"
+                HorizontalAlignment="Center"/>
+                        <TextBlock Text="So sánh File PDF với nhau"
+                FontSize="13"
+                Foreground="#666"
+                TextAlignment="Center"/>    
+                </StackPanel>
+            </Border>
         </UniformGrid>
     </Grid>
     

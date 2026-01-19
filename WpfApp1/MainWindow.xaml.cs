@@ -48,6 +48,14 @@ namespace WpfApp1
             window.ShowDialog();
             this.Show();
         }
+        private void ComparePdf_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ComparePdfWindow window = new ComparePdfWindow();
+            this.Hide();
+            window.Owner = this;
+            window.ShowDialog();
+            this.Show();
+        }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
