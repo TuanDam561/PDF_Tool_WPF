@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>faviconNew.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\faviconNew.ico</ApplicationIcon>
     <AssemblyName>Tool PDF</AssemblyName>
   </PropertyGroup>
 
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="faviconNew.ico" />
+    <Content Include="Assets\faviconNew.ico" />
     <Content Include="Tool\qpdf\concrt140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

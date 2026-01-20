@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.Win32;
+using WpfApp1.Functions;
 using WpfApp1.Model;
 using WpfApp1.Utils;
 
@@ -198,6 +200,17 @@ namespace WpfApp1
             _wordFiles.Insert(newIndex, dropped);
 
             RefreshList();
+        }
+
+        private void PreviewItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is WordItem item)
+            {
+                PreviewService.PreviewWithLibreOffice(
+                    item.FullPath,
+                    sofficePath
+                );
+            }
         }
 
         private void RefreshList()

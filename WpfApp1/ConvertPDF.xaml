@@ -52,14 +52,36 @@
                              BorderThickness="0"
                              AllowDrop="True"
                              PreviewMouseLeftButtonDown="ListBox_MouseDown"
-                             Drop="ListBox_Drop">
+                             Drop="ListBox_Drop">       
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Padding="8"
                                         Margin="0,0,0,6"
                                         Background="#F3F3F3"
                                         CornerRadius="6">
-                                    <TextBlock Text="{Binding FileName}"/>
+
+                                    <Grid VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Tên file -->
+                                        <TextBlock Text="{Binding FileName}"
+                                                   VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis"/>
+
+                                        <!-- Nút Preview -->
+                                        <Button Grid.Column="1"
+                                                Content="Xem trước PDF"
+                                                Width="100"
+                                                Height="28"
+                                                Margin="20,0,0,0"
+                                                ToolTip="Xem trước PDF" 
+                                                Click="PreviewItem_Click"
+                           />
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

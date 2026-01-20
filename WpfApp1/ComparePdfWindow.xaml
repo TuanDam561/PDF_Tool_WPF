@@ -25,6 +25,12 @@
                        FontSize="14"
                        Foreground="Gray"
                        Margin="0,5,0,0"/>
+            <TextBlock Text=" Phần mềm chỉ có thể kiểm tra được Mã(Hash) của PDF và số trang để so sánh chứ không thế so sánh chuyên nghiệp như các phần mềm trả phí khác!"
+                       FontSize="14"
+                       Foreground="Red"
+                       Margin="0,5,0,0"
+                       TextWrapping="Wrap"
+                       FontWeight="Bold"/>
         </StackPanel>
 
         <!-- ================= CONTENT ================= -->

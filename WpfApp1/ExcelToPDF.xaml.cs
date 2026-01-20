@@ -11,11 +11,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using WpfApp1.Model;
 using WpfApp1.Utils;
+using WpfApp1.Functions;
 
 namespace WpfApp1
 {
@@ -208,6 +208,18 @@ namespace WpfApp1
 
             RefreshList();
         }
+
+        private void PreviewItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is WordItem item)
+            {
+                PreviewService.PreviewWithLibreOffice(
+                    item.FullPath,
+                    sofficePath
+                );
+            }
+        }
+
 
         private void RefreshList()
         {

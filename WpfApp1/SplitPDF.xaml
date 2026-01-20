@@ -67,7 +67,8 @@
                             CornerRadius="6"
                             ClipToBounds="True">
 
-                        <wv2:WebView2 x:Name="PdfViewer"/>
+                        <wv2:WebView2 x:Name="PdfViewer"
+                                      />
                     </Border>
                 </Grid>
             </Border>
@@ -81,23 +82,43 @@
                         Padding="15"
                         Margin="0,0,0,15">
 
-                    <StackPanel>
-                        <Button Content="📄 Chọn file PDF"
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Button -->
+                        <Button Grid.Row="0"
+                                Content="📄 Chọn file PDF"
                                 Height="40"
                                 Click="SelectPdf_Click"/>
 
-                        <TextBlock Text="Trang cần cắt"
+                        <!-- Label -->
+                        <TextBlock Grid.Row="1"
+                                   Text="Trang cần cắt"
                                    Margin="0,12,0,4"
                                    FontWeight="Bold"/>
 
-                        <TextBlock Text="Ví dụ: 1 | 1-3 | 1-3,5,7-10"
+                        <!-- Hint -->
+                        <TextBlock Grid.Row="2"
+                                   Text="Ví dụ: 1 | 1-3 | 1-3,5,7-10"
                                    Foreground="#666"
                                    FontSize="12"
                                    Margin="0,0,0,4"/>
 
-                        <TextBox x:Name="PageInput"
-                                 Height="34"/>
-                    </StackPanel>
+                        <!-- TextBox căn giữa -->
+                        <Grid Grid.Row="3"
+                              VerticalAlignment="Center">
+                            <TextBox x:Name="PageInput"
+                                     Height="34"
+                                     VerticalContentAlignment="Center"
+                                     TextChanged="PageInput_TextChanged"/>          
+                        </Grid>
+                    </Grid>
+
                 </Border>
 
                 <!-- SPLIT -->
