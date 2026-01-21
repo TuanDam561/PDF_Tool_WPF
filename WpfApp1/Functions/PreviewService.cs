@@ -2,12 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 
-namespace WpfApp1.Functions 
+namespace WpfApp1.Functions
 {
     public static class PreviewService
     {
-        public static void PreviewWithLibreOffice(
+        public static async Task PreviewWithLibreOfficeAsync(
             string inputFile,
             string sofficePath)
         {
@@ -29,14 +30,21 @@ namespace WpfApp1.Functions
                     UseShellExecute = false
                 };
 
-                using Process p = Process.Start(psi)!;
-                p.WaitForExit();
+                await Task.Run(() =>
+                {
+                    using Process p = Process.Start(psi)!;
+                    p.WaitForExit();
+                });
 
                 if (!File.Exists(expectedPdf))
                     throw new Exception("Không tạo được file preview PDF");
 
-                var preview = new PreviewFile(expectedPdf);
-                preview.ShowDialog();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Mouse.OverrideCursor = null;
+                    var preview = new PreviewFile(expectedPdf);
+                    preview.ShowDialog();
+                });
             }
             finally
             {

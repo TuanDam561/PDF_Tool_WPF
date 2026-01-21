@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -202,14 +203,27 @@ namespace WpfApp1
             RefreshList();
         }
 
-        private void PreviewItem_Click(object sender, RoutedEventArgs e)
+        private async void PreviewItem_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.DataContext is WordItem item)
             {
-                PreviewService.PreviewWithLibreOffice(
-                    item.FullPath,
-                    sofficePath
-                );
+                try
+                {
+                    Mouse.OverrideCursor=Cursors.Wait;
+                    await PreviewService.PreviewWithLibreOfficeAsync(
+                                  item.FullPath,
+                                  sofficePath
+                    );
+
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Lỗi preview");
+                }
+                finally{
+                    Mouse.OverrideCursor = null;
+                }
+              
             }
         }
 

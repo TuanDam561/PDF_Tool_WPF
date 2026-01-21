@@ -2,28 +2,27 @@
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
+using WpfApp1.Functions;
 using WpfApp1.Model;
 using PdfItem = WpfApp1.Model.PdfItem;
-using WpfApp1.Functions;
 
 namespace WpfApp1
 {
-    public partial class MergePdfWindow : Window
+    public partial class MergePdfWindow: Window
     {
-        private ObservableCollection<PdfItem> pdfItems
+        private readonly ObservableCollection<PdfItem> _pdfItems
             = new ObservableCollection<PdfItem>();
-        private List<string> _selectedFiles = new();
 
         public MergePdfWindow()
         {
             InitializeComponent();
-            PdfListBox.ItemsSource = pdfItems;
+            PdfListBox.ItemsSource = _pdfItems;
         }
 
         // =========================
@@ -32,41 +31,40 @@ namespace WpfApp1
         private void AddPdf_Click(object sender, RoutedEventArgs e)
         {
             var files = FilePicker.Pick(true);
-            FilePicker.AddToCollection(files, pdfItems);
-        }
+            FilePicker.AddToCollection(files, _pdfItems);
+            PreviewButton.IsEnabled = _pdfItems.Count >= 2;
 
+        }
 
         // =========================
         // KÉO THẢ FILE
         // =========================
         private void PdfListBox_DragOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effects = DragDropEffects.Copy;
-            else
-                e.Effects = DragDropEffects.None;
+            e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop)
+                ? DragDropEffects.Copy
+                : DragDropEffects.None;
 
             e.Handled = true;
         }
 
         private void PdfListBox_Drop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+                return;
 
-                foreach (var file in files)
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            foreach (var file in files.Where(f => Path.GetExtension(f).ToLower() == ".pdf"))
+            {
+                if (_pdfItems.Any(x => x.FullPath == file))
+                    continue;
+
+                _pdfItems.Add(new PdfItem
                 {
-                    if (Path.GetExtension(file).ToLower() == ".pdf"
-                        && !pdfItems.Any(x => x.FullPath == file))
-                    {
-                        pdfItems.Add(new PdfItem
-                        {
-                            FileName = Path.GetFileName(file),
-                            FullPath = file
-                        });
-                    }
-                }
+                    FileName = Path.GetFileName(file),
+                    FullPath = file
+                });
             }
         }
 
@@ -76,9 +74,7 @@ namespace WpfApp1
         private void RemovePdf_Click(object sender, RoutedEventArgs e)
         {
             if (PdfListBox.SelectedItem is PdfItem item)
-            {
-                pdfItems.Remove(item);
-            }
+                _pdfItems.Remove(item);
         }
 
         // =========================
@@ -87,41 +83,99 @@ namespace WpfApp1
         private void MoveUp_Click(object sender, RoutedEventArgs e)
         {
             int index = PdfListBox.SelectedIndex;
+            if (index <= 0) return;
 
-            if (index > 0)
-            {
-                var item = pdfItems[index];
-                pdfItems.RemoveAt(index);
-                pdfItems.Insert(index - 1, item);
-                PdfListBox.SelectedIndex = index - 1;
-            }
+            (_pdfItems[index - 1], _pdfItems[index]) =
+                (_pdfItems[index], _pdfItems[index - 1]);
+
+            PdfListBox.SelectedIndex = index - 1;
         }
 
         private void MoveDown_Click(object sender, RoutedEventArgs e)
         {
             int index = PdfListBox.SelectedIndex;
+            if (index < 0 || index >= _pdfItems.Count - 1) return;
 
-            if (index >= 0 && index < pdfItems.Count - 1)
-            {
-                var item = pdfItems[index];
-                pdfItems.RemoveAt(index);
-                pdfItems.Insert(index + 1, item);
-                PdfListBox.SelectedIndex = index + 1;
-            }
+            (_pdfItems[index + 1], _pdfItems[index]) =
+                (_pdfItems[index], _pdfItems[index + 1]);
+
+            PdfListBox.SelectedIndex = index + 1;
         }
 
         // =========================
-        // MERGE PDF
+        // PREVIEW FILE ĐANG CHỌN
         // =========================
-        private void MergePdf_Click(object sender, RoutedEventArgs e)
+        private async void PreviewPdf_Click(object sender, RoutedEventArgs e)
         {
-            if (pdfItems.Count < 2)
+            if (_pdfItems.Count < 2)
+            {
+                MessageBox.Show("Cần ít nhất 2 file PDF để xem trước bản ghép.");
+                return;
+            }
+
+            string tempFile = Path.Combine(
+                Path.GetTempPath(),
+                $"preview_merge_{Guid.NewGuid():N}.pdf"
+            );
+
+            try
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                await Task.Run(() =>
+                {
+                    using PdfDocument output = new PdfDocument();
+
+                    foreach (var item in _pdfItems)
+                    {
+                        using PdfDocument input =
+                            PdfReader.Open(item.FullPath, PdfDocumentOpenMode.Import);
+
+                        for (int i = 0; i < input.PageCount; i++)
+                            output.AddPage(input.Pages[i]);
+                    }
+
+                    output.Save(tempFile);
+                });
+
+                Mouse.OverrideCursor = null;
+
+                var preview = new PreviewFile(tempFile)
+                {
+                    Cursor = Cursors.Arrow
+                };
+                preview.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Không thể preview:\n" + ex.Message);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+
+                // dọn file tạm
+                if (File.Exists(tempFile))
+                {
+                    try { File.Delete(tempFile); }
+                    catch { /* ignore */ }
+                }
+            }
+        }
+
+
+        // =========================
+        // MERGE PDF (ASYNC)
+        // =========================
+        private async void MergePdf_Click(object sender, RoutedEventArgs e)
+        {
+            if (_pdfItems.Count < 2)
             {
                 MessageBox.Show("Cần ít nhất 2 file PDF để nối.");
                 return;
             }
 
-            SaveFileDialog saveDialog = new SaveFileDialog
+            var saveDialog = new SaveFileDialog
             {
                 Filter = "PDF file (*.pdf)|*.pdf",
                 FileName = "merged.pdf"
@@ -132,21 +186,8 @@ namespace WpfApp1
 
             try
             {
-                PdfDocument outputDocument = new PdfDocument();
-
-                foreach (var item in pdfItems)
-                {
-                    PdfDocument inputDocument =
-                        PdfReader.Open(item.FullPath, PdfDocumentOpenMode.Import);
-
-                    for (int i = 0; i < inputDocument.PageCount; i++)
-                    {
-                        outputDocument.AddPage(inputDocument.Pages[i]);
-                    }
-                }
-
-                outputDocument.Save(saveDialog.FileName);
-
+                Mouse.OverrideCursor = Cursors.Wait;
+                await MergePdfAsync(saveDialog.FileName);
                 MessageBox.Show("Nối PDF thành công 🎉");
             }
             catch (Exception ex)
@@ -158,6 +199,29 @@ namespace WpfApp1
                     MessageBoxImage.Error
                 );
             }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
+        }
+
+        private Task MergePdfAsync(string outputPath)
+        {
+            return Task.Run(() =>
+            {
+                using PdfDocument output = new PdfDocument();
+
+                foreach (var item in _pdfItems)
+                {
+                    using PdfDocument input =
+                        PdfReader.Open(item.FullPath, PdfDocumentOpenMode.Import);
+
+                    for (int i = 0; i < input.PageCount; i++)
+                        output.AddPage(input.Pages[i]);
+                }
+
+                output.Save(outputPath);
+            });
         }
     }
 }

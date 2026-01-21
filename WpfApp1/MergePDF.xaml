@@ -42,12 +42,26 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Danh sách file PDF"
-                               FontWeight="Bold"
-                               FontSize="14"
-                               Margin="0,0,0,10"/>
+                        <TextBlock Text="Danh sách file PDF"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"/>
 
+                        <Button x:Name="PreviewButton"
+                                Grid.Column="1"
+                                Content="👁️ Xem trước"
+                                Margin="10,0,0,0"
+                                Padding="10,4"
+                                Click="PreviewPdf_Click"
+                                ToolTip="Cần ít nhất 2 file mới được xem trước!"
+                                IsEnabled="False"/>   
+                    </Grid>
                     <ListBox x:Name="PdfListBox"
                              Grid.Row="1"
                              BorderThickness="0"

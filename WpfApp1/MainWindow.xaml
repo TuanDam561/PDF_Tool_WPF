@@ -14,16 +14,42 @@
         </Grid.RowDefinitions>
 
         <!-- HEADER -->
-        <StackPanel>
-            <TextBlock Text="DOCUMENT TOOL"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="#E5322D"/>
+        <!-- HEADER -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Chọn công cụ bạn muốn sử dụng"
-                       FontSize="14"
-                       Foreground="#555"/>
-        </StackPanel>
+            <!-- LEFT: TITLE -->
+            <StackPanel>
+                <TextBlock Text="DOCUMENT TOOL"
+                   FontSize="28"
+                   FontWeight="Bold"
+                   Foreground="#E5322D"/>
+
+                <TextBlock Text="Chọn công cụ bạn muốn sử dụng"
+                   FontSize="14"
+                   Foreground="#555"/>
+            </StackPanel>
+
+            <!-- RIGHT: EXIT BUTTON -->
+            <Button Grid.Column="1"
+                    Content="✖"
+                    Width="36"
+                    Height="36"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="White"           
+                    Background="Red"
+                    BorderBrush="#CCC"
+                    BorderThickness="1"
+                    Cursor="Hand"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Right"
+                    Click="Exit_Click"/>    
+        </Grid>
+
 
         <ScrollViewer Grid.Row="1"
               VerticalScrollBarVisibility="Hidden"
@@ -156,7 +182,7 @@
                 </Border>
                 <!--Edit PDF-->
                 <Border Style="{StaticResource ToolCardStyle}"
-                     MouseLeftButtonUp="ComparePdf_Click"
+                     MouseLeftButtonUp="EditPdf_Click"
                      ToolTip="Sửa xoay dọc xoay ngang và sắp xếp lại trang PDF">
                     <StackPanel Margin="0,30">
                         <TextBlock Text="🔨"

@@ -209,14 +209,28 @@ namespace WpfApp1
             RefreshList();
         }
 
-        private void PreviewItem_Click(object sender, RoutedEventArgs e)
+        private async void PreviewItem_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.DataContext is WordItem item)
             {
-                PreviewService.PreviewWithLibreOffice(
-                    item.FullPath,
-                    sofficePath
-                );
+                try
+                {
+                    Mouse.OverrideCursor = Cursors.Wait;
+                    await PreviewService.PreviewWithLibreOfficeAsync(
+                                  item.FullPath,
+                                  sofficePath
+                    );
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Lỗi preview");
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = null;
+                }
+
             }
         }
 

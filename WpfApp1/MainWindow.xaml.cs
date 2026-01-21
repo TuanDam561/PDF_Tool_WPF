@@ -1,5 +1,6 @@
-﻿using WpfApp1;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
+using WpfApp1;
 
 
 namespace WpfApp1
@@ -64,6 +65,15 @@ namespace WpfApp1
             window.ShowDialog();
             this.Show();
         }
+
+        private void EditPdf_Click(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Chức năng này đang trong quá trình phát triển sẽ cập nhật sau!",
+                            "Thông báo",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+        }
+
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
