@@ -26,10 +26,19 @@ namespace WpfApp1
     {
         private List<WordItem> _wordFiles = new();
         private Point _dragStart;
-        string sofficePath = LibreOfficePath.GetSofficePath();
+        private string? sofficePath;
+     //   string sofficePath = LibreOfficePath.GetSofficePath();
+
         public ExcelToPDF()
         {
             InitializeComponent();
+            sofficePath=LibreOfficePath.GetSofficePath();
+            if(sofficePath== null)
+            {
+                // Disable các chức năng cần LibreOffice
+                ConvertButton.IsEnabled = false;
+                return; // window vẫn mở, app không chết
+            }
         }
 
         // ➕ Thêm file Word

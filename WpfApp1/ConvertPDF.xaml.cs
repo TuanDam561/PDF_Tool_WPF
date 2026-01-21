@@ -18,12 +18,19 @@ namespace WpfApp1
     {
         private List<WordItem> _wordFiles = new();
         private Point _dragStart;
-        string sofficePath = LibreOfficePath.GetSofficePath();
+        private string? sofficePath;
+      //  string sofficePath = LibreOfficePath.GetSofficePath();
 
 
         public ConvertPDF()
         {
             InitializeComponent();
+            sofficePath = LibreOfficePath.GetSofficePath();
+            if (sofficePath == null)
+            {
+                ConvertButton.IsEnabled = false;
+                return;
+            }
         }
 
         // ➕ Thêm file Word
