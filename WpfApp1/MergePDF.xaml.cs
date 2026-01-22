@@ -1,20 +1,16 @@
 ﻿using Microsoft.Win32;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Functions;
-using WpfApp1.Model;
 using PdfItem = WpfApp1.Model.PdfItem;
 
 namespace WpfApp1
 {
-    public partial class MergePdfWindow: Window
+    public partial class MergePdfWindow : Window
     {
         private readonly ObservableCollection<PdfItem> _pdfItems
             = new ObservableCollection<PdfItem>();

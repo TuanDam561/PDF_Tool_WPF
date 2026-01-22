@@ -115,6 +115,7 @@
                             <TextBox x:Name="PageInput"
                                      Height="34"
                                      VerticalContentAlignment="Center"
+                                     IsEnabled="False"
                                      TextChanged="PageInput_TextChanged"/>          
                         </Grid>
                     </Grid>

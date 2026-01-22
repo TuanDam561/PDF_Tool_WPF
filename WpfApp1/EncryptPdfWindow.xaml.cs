@@ -1,12 +1,10 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using WpfApp1.Functions;
+using WpfApp1.Utils;
 
 
 namespace WpfApp1
@@ -72,7 +70,7 @@ namespace WpfApp1
                 return;
             }
 
-            string qpdfPath = GetQpdfPath();
+            string qpdfPath = QPDFPath.Get();
             //MessageBox.Show(qpdfPath + "\nTồn tại: " + File.Exists(qpdfPath));
             if (!File.Exists(qpdfPath))
             {
@@ -191,18 +189,7 @@ namespace WpfApp1
         }
 
 
-        // =============================
-        // PATH qpdf.exe
-        // =============================
-        private string GetQpdfPath()
-        {
-            return Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Tool",
-                "qpdf",
-                "qpdf.exe"
-            );
-        }
+
 
     }
 }
