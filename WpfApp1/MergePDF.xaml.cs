@@ -26,11 +26,31 @@ namespace WpfApp1
         // =========================
         private void AddPdf_Click(object sender, RoutedEventArgs e)
         {
-            var files = FilePicker.Pick(true);
-            FilePicker.AddToCollection(files, _pdfItems);
-            PreviewButton.IsEnabled = _pdfItems.Count >= 2;
+            var files = FilePicker.Pick(multiSelect: true);
+            if (!files.Any())
+                return;
 
+            foreach (var file in files)
+            {
+                // 🔐 check & unlock giống SelectPdf_Click
+                bool opened = HandleLockedPdf.TryOpenPdf(
+                    file,
+                    this,
+                    out string usablePdfPath,
+                    out int pageCount);
+
+                if (!opened)
+                    continue; // user cancel hoặc unlock fail → bỏ file này
+
+                // ✅ add file đã unlock (hoặc file gốc nếu không khóa)
+                FilePicker.AddToCollection(
+                    new[] { usablePdfPath },
+                    _pdfItems);
+            }
+
+            PreviewButton.IsEnabled = _pdfItems.Count >= 2;
         }
+
 
         // =========================
         // KÉO THẢ FILE
