@@ -1,10 +1,5 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WpfApp1.Model;
 
 namespace WpfApp1.Functions
@@ -28,6 +23,33 @@ namespace WpfApp1.Functions
                 ? dialog.FileNames.ToList()
                 : new List<string>();
         }
+
+        public static List<string> PickWord(bool multiSelect = true)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Word Files (*.doc;*.docx)|*.doc;*.docx",
+                Multiselect = multiSelect
+            };
+
+            return dialog.ShowDialog() == true
+                ? dialog.FileNames.ToList()
+                : new List<string>();
+        }
+
+        public static List<string> PickExcel(bool multiSelect = true)
+        {
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Excel Files (*.xls;*.xlsx)|*.xls;*.xlsx",
+                Multiselect = multiSelect
+            };
+
+            return dialog.ShowDialog() == true
+                ? dialog.FileNames.ToList()
+                : new List<string>();
+        }
+
 
         /// <summary>
         /// Thêm file PDF vào collection, tự tránh trùng

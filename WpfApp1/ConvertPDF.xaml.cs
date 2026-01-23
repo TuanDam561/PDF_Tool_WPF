@@ -1,17 +1,12 @@
 ﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WpfApp1.Functions;
 using WpfApp1.Model;
 using WpfApp1.Utils;
-
 namespace WpfApp1
 {
     public partial class ConvertPDF : Window
@@ -19,7 +14,7 @@ namespace WpfApp1
         private List<WordItem> _wordFiles = new();
         private Point _dragStart;
         private string? sofficePath;
-      //  string sofficePath = LibreOfficePath.GetSofficePath();
+        //  string sofficePath = LibreOfficePath.GetSofficePath();
 
 
         public ConvertPDF()
@@ -36,26 +31,27 @@ namespace WpfApp1
         // ➕ Thêm file Word
         private void AddWord_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Filter = "Word Files (*.doc;*.docx)|*.doc;*.docx",
-                Multiselect = true
-            };
+            var files = FilePicker.PickWord(multiSelect: true);
+            if (!files.Any())
+                return;
 
-            if (dlg.ShowDialog() == true)
+            foreach (var file in files)
             {
-                foreach (var file in dlg.FileNames)
+                // 1️⃣ check Word có bị khóa không
+                if (!HandleOfficeLockedFile.TryOpenOfficeFile(file, this))
+                    continue; // user cancel hoặc mở không được → bỏ file này
+
+                // 2️⃣ add vào list
+                _wordFiles.Add(new WordItem
                 {
-                    _wordFiles.Add(new WordItem
-                    {
-                        FileName = Path.GetFileName(file),
-                        FullPath = file
-                    });
-                }
-
-                RefreshList();
+                    FileName = Path.GetFileName(file),
+                    FullPath = file
+                });
             }
+
+            RefreshList();
         }
+
 
         // ❌ Xóa file
         private void RemoveWord_Click(object sender, RoutedEventArgs e)
@@ -67,7 +63,7 @@ namespace WpfApp1
             }
         }
 
-      
+
         private void Convert_Click(object sender, RoutedEventArgs e)
         {
             if (_wordFiles.Count == 0)
@@ -100,7 +96,7 @@ namespace WpfApp1
             {
                 try
                 {
-                    string libreOfficePath = sofficePath;
+                    string libreOfficePath = sofficePath!;
                     int total = _wordFiles.Count;
                     int current = 0;
 
@@ -115,7 +111,7 @@ namespace WpfApp1
                         });
 
                         ConvertWordToPdf(
-                            libreOfficePath,
+                            libreOfficePath!,
                             item.FullPath,
                             outputFolder
                         );
@@ -216,21 +212,24 @@ namespace WpfApp1
             {
                 try
                 {
-                    Mouse.OverrideCursor=Cursors.Wait;
+                    Mouse.OverrideCursor = Cursors.Wait;
                     await PreviewService.PreviewWithLibreOfficeAsync(
                                   item.FullPath,
-                                  sofficePath
+                                  sofficePath!
                     );
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Lỗi preview");
+                    LogService.LogException(ex, "preview");
+
                 }
-                finally{
+                finally
+                {
                     Mouse.OverrideCursor = null;
                 }
-              
+
             }
         }
 

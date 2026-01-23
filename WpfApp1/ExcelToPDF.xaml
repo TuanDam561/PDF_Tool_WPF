@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Chuyển Excel thành PDF"
-        Width="900" Height="550">
+        Width="900" Height="550"
+        Background="#F5F6F8">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using Microsoft.Win32;
+using WpfApp1.Functions;
 using WpfApp1.Model;
 using WpfApp1.Utils;
-using WpfApp1.Functions;
 
 namespace WpfApp1
 {
@@ -27,13 +18,13 @@ namespace WpfApp1
         private List<WordItem> _wordFiles = new();
         private Point _dragStart;
         private string? sofficePath;
-     //   string sofficePath = LibreOfficePath.GetSofficePath();
+        //   string sofficePath = LibreOfficePath.GetSofficePath();
 
         public ExcelToPDF()
         {
             InitializeComponent();
-            sofficePath=LibreOfficePath.GetSofficePath();
-            if(sofficePath== null)
+            sofficePath = LibreOfficePath.GetSofficePath();
+            if (sofficePath == null)
             {
                 // Disable các chức năng cần LibreOffice
                 ConvertButton.IsEnabled = false;
@@ -44,25 +35,25 @@ namespace WpfApp1
         // ➕ Thêm file Word
         private void AddWord_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog
-            {
-                Filter = "Excel Files (*.xls;*.xlsx)|*.xls;*.xlsx",
-                Multiselect = true
-            };
+            var files = FilePicker.PickExcel(multiSelect: true);
+            if (!files.Any())
+                return;
 
-            if (dlg.ShowDialog() == true)
+            foreach (var file in files)
             {
-                foreach (var file in dlg.FileNames)
+                // 1️⃣ check Word có bị khóa không
+                if (!HandleOfficeLockedFile.TryOpenOfficeFile(file, this))
+                    continue; // user cancel hoặc mở không được → bỏ file này
+
+                // 2️⃣ add vào list
+                _wordFiles.Add(new WordItem
                 {
-                    _wordFiles.Add(new WordItem
-                    {
-                        FileName = Path.GetFileName(file),
-                        FullPath = file
-                    });
-                }
-
-                RefreshList();
+                    FileName = Path.GetFileName(file),
+                    FullPath = file
+                });
             }
+
+            RefreshList();
         }
 
         // ❌ Xóa file
@@ -108,7 +99,7 @@ namespace WpfApp1
             {
                 try
                 {
-                    string libreOfficePath = sofficePath;
+                    string libreOfficePath = sofficePath!;
                     int total = _wordFiles.Count;
                     int current = 0;
 
@@ -227,7 +218,7 @@ namespace WpfApp1
                     Mouse.OverrideCursor = Cursors.Wait;
                     await PreviewService.PreviewWithLibreOfficeAsync(
                                   item.FullPath,
-                                  sofficePath
+                                  sofficePath!
                     );
 
                 }
