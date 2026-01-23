@@ -17,6 +17,10 @@ namespace WpfApp1
     public partial class PasswordDialog : Window
     {
         public string Password => PasswordBox.Password;
+        public string PdfFileName
+        {
+            set => FileNameText.Text = value;
+        }
         public PasswordDialog()
         {
             InitializeComponent();
@@ -34,7 +38,8 @@ namespace WpfApp1
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            //DialogResult = false;
+            Close();
         }
     }
 }

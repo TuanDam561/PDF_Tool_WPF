@@ -45,39 +45,46 @@ namespace WpfApp1.Functions
         // PDF bị khóa
         // =========================
         private static bool HandleEncryptedPdf(
-            string pdfPath,
-            Window owner,
-            out string unlockedPdfPath,
-            out int pageCount)
+              string pdfPath,
+              Window owner,
+              out string unlockedPdfPath,
+              out int pageCount)
         {
             unlockedPdfPath = string.Empty;
             pageCount = 0;
 
-            var dlg = new PasswordDialog
+            while (true)
             {
-                Owner = owner
-            };
+                var dlg = new PasswordDialog
+                {
+                    Owner = owner,
+                    PdfFileName = Path.GetFileName(pdfPath)
+                };
 
-            if (dlg.ShowDialog() != true)
-                return false;
+                // User bấm Cancel → bỏ file này
+                if (dlg.ShowDialog() != true)
+                    return false;
 
-            if (!QPdfUnlock(pdfPath, dlg.Password, out unlockedPdfPath))
-            {
+                // Thử unlock
+                if (QPdfUnlock(pdfPath, dlg.Password, out unlockedPdfPath))
+                {
+                    using var doc = PdfReader.Open(
+                        unlockedPdfPath,
+                        PdfDocumentOpenMode.Import);
+
+                    pageCount = doc.PageCount;
+                    return true; // OK → dùng file này
+                }
+
+                // Sai mật khẩu → báo lỗi → quay lại nhập tiếp
                 MessageBox.Show(
-                    "Mật khẩu không đúng hoặc không thể mở PDF.",
+                    "Mật khẩu không đúng. Vui lòng nhập lại.",
                     "PDF bị khóa",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
-                return false;
             }
-
-            using var doc = PdfReader.Open(
-                unlockedPdfPath,
-                PdfDocumentOpenMode.Import);
-
-            pageCount = doc.PageCount;
-            return true;
         }
+
 
         // =========================
         // Unlock bằng QPDF

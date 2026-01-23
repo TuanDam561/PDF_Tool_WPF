@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="ExcelToPDF"
+        Title="Chuyển Excel thành PDF"
         Width="900" Height="550">
     <Grid Margin="20">
         <Grid.RowDefinitions>

@@ -37,18 +37,55 @@ namespace WpfApp1
         // =============================
         private void SelectPdf_Click(object sender, RoutedEventArgs e)
         {
-            _selectedFiles = FilePicker.Pick(MultiFileCheckBox.IsChecked == true);
+            // true = cho phép chọn nhiều file
+            var files = FilePicker.Pick(MultiFileCheckBox.IsChecked == true);
+
+            if (!files.Any())
+                return;
+
+            _selectedFiles.Clear();
+
+            foreach (var file in files)
+            {
+                bool opened = HandleLockedPdf.TryOpenPdf(
+                    file,
+                    this,
+                    out string usablePdfPath,
+                    out int pageCount);
+
+                if (!opened)
+                {
+                    // User cancel hoặc nhập sai password
+                    // → bỏ qua file này, KHÔNG crash
+                    continue;
+                }
+
+                _selectedFiles.Add(usablePdfPath);
+            }
 
             if (_selectedFiles.Count == 0)
             {
-                PdfInfoTextBox.Text = "";
+                MessageBox.Show(
+                    "Không có file PDF nào hợp lệ để mã hóa.",
+                    "Thông báo",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
                 return;
             }
 
-            PdfInfoTextBox.Text = _selectedFiles.Count == 1
-                ? Path.GetFileName(_selectedFiles[0])
-                : $"Đã chọn {_selectedFiles.Count} file PDF";
+            // =============================
+            // HIỂN THỊ UI
+            // =============================
+            if (_selectedFiles.Count == 1)
+            {
+                PdfInfoTextBox.Text = Path.GetFileName(_selectedFiles[0]);
+            }
+            else
+            {
+                PdfInfoTextBox.Text = $"Đã chọn {_selectedFiles.Count} file PDF";
+            }
         }
+
 
 
         // =============================

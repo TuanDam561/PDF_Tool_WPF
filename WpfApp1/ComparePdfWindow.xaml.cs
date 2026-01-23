@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using WpfApp1.Functions;
@@ -19,22 +20,49 @@ namespace WpfApp1
         private void SelectPdfA_Click(object sender, RoutedEventArgs e)
         {
             var files = FilePicker.Pick(false);
-            if (files.Count > 0)
+           
+            if (!files.Any())
             {
-                _pdfA = files[0];
-                PdfAText.Text = System.IO.Path.GetFileName(_pdfA);
+                return;
             }
+            string selectedPdf = files.First();
+            bool opened = HandleLockedPdf.TryOpenPdf(
+               selectedPdf,
+               this,
+               out string usablePdfPath,
+               out int pageCount);
+
+            if (!opened)
+                return;
+            // Set PDF A (có thể là file đã unlock)
+            _pdfA = usablePdfPath;
+
+            PdfAText.Text = Path.GetFileName(_pdfA);
         }
 
         private void SelectPdfB_Click(object sender, RoutedEventArgs e)
         {
-            var files = FilePicker.Pick(false);
-            if (files.Count > 0)
-            {
-                _pdfB = files[0];
-                PdfBText.Text = System.IO.Path.GetFileName(_pdfB);
-            }
+            var files = FilePicker.Pick(multiSelect: false);
+            if (!files.Any())
+                return;
+
+            string selectedPdf = files.First();
+
+            bool opened = HandleLockedPdf.TryOpenPdf(
+                selectedPdf,
+                this,
+                out string usablePdfPath,
+                out int pageCount);
+
+            if (!opened)
+                return;
+
+            // Set PDF B
+            _pdfB = usablePdfPath;
+
+            PdfBText.Text = Path.GetFileName(_pdfB);
         }
+
 
         private void Compare_Click(object sender, RoutedEventArgs e)
         {
