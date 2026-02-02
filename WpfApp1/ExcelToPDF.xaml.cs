@@ -45,6 +45,14 @@ namespace WpfApp1
                 if (!HandleOfficeLockedFile.TryOpenOfficeFile(file, this))
                     continue; // user cancel hoặc mở không được → bỏ file này
 
+                //if (!HandleOfficeLockedFile.TryOpenOfficeFile(file, this, out var usablePath))
+                //    continue;
+
+                //_wordFiles.Add(new WordItem
+                //{
+                //    FileName = Path.GetFileName(usablePath),
+                //    FullPath = usablePath
+                //});
                 // 2️⃣ add vào list
                 _wordFiles.Add(new WordItem
                 {

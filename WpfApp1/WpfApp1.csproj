@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".env" />
     <None Remove="Tool\qpdf\concrt140.dll" />
     <None Remove="Tool\qpdf\fix-qdf.exe" />
     <None Remove="Tool\qpdf\msvcp140.dll" />
@@ -26,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include=".env">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\faviconNew.ico" />
     <Content Include="Tool\qpdf\concrt140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -67,8 +71,13 @@
 
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.4.1" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58" />
+    <PackageReference Include="DotNetEnv" Version="3.1.1" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
+    <PackageReference Include="Syncfusion.DocIO.Net.Core" Version="32.1.25" />
+    <PackageReference Include="Syncfusion.DocIORenderer.Net.Core" Version="32.1.25" />
+    <PackageReference Include="Syncfusion.Licensing" Version="32.1.25" />
+    <PackageReference Include="Syncfusion.Pdf.Net.Core" Version="32.1.25" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.2" />
   </ItemGroup>
 

@@ -90,22 +90,27 @@ namespace WpfApp1.Functions
         // Unlock bằng QPDF
         // =========================
         private static bool QPdfUnlock(
-        string inputPdf,
-        string password,
-        out string outputPdf)
+         string inputPdf,
+         string password,
+         out string outputPdf)
         {
-            var tempDir = Path.GetTempPath();
+            var appDir = AppDomain.CurrentDomain.BaseDirectory;
+            var unlockDir = Path.Combine(appDir, "UnlockedFiles");
+
+            if (!Directory.Exists(unlockDir))
+                Directory.CreateDirectory(unlockDir);
+
             var originalName = Path.GetFileNameWithoutExtension(inputPdf);
 
             outputPdf = Path.Combine(
-                tempDir,
+                unlockDir,
                 $"{originalName}_unlock.pdf");
 
             int i = 1;
             while (File.Exists(outputPdf))
             {
                 outputPdf = Path.Combine(
-                    tempDir,
+                    unlockDir,
                     $"{originalName}_unlock({i}).pdf");
                 i++;
             }
@@ -125,6 +130,5 @@ namespace WpfApp1.Functions
 
             return p?.ExitCode == 0 && File.Exists(outputPdf);
         }
-
     }
 }

@@ -1,22 +1,51 @@
-﻿using System.Configuration;
-using System.Data;
+﻿using Syncfusion.Licensing;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
+using DotNetEnv;
 using WpfApp1.Functions;
+
 namespace WpfApp1
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
-
+            // Đăng ký global exception TRƯỚC
             DispatcherUnhandledException += OnDispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
             TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
+
+            // 1️⃣ Load .env (ưu tiên ProgramData → fallback project/exe)
+            var prodEnv = @"C:\ProgramData\PDF_TOOL\.env";
+
+            if (File.Exists(prodEnv))
+                Env.Load(prodEnv);
+            else
+                Env.Load(); // dev: WpfApp1/.env hoặc cạnh exe
+
+            // 2️⃣ Đọc license
+            var key = Environment.GetEnvironmentVariable("SYNCFUSION_LICENSE");
+
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                MessageBox.Show(
+                    "Không tìm thấy SYNCFUSION_LICENSE trong .env",
+                    "Thiếu license",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+
+                Shutdown(); // ❗ thoát app gọn gàng
+                return;
+            }
+
+            // 3️⃣ Register Syncfusion license (PHẢI TRƯỚC base.OnStartup)
+            SyncfusionLicenseProvider.RegisterLicense(key);
+
+            // 4️⃣ Gọi base SAU KHI license OK
+            base.OnStartup(e);
         }
 
         private void OnDispatcherUnhandledException(
@@ -24,7 +53,7 @@ namespace WpfApp1
             DispatcherUnhandledExceptionEventArgs e)
         {
             LogService.LogException(e.Exception, "UI Thread");
-            e.Handled = true; // ❗ không crash app
+            e.Handled = true; // không crash app
         }
 
         private void OnUnhandledException(
