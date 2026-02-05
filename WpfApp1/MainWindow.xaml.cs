@@ -66,12 +66,13 @@ namespace WpfApp1
             this.Show();
         }
 
-        private void EditPdf_Click(object sender, MouseButtonEventArgs e)
+        private void EditPdf_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            MessageBox.Show("Chức năng này đang trong quá trình phát triển sẽ cập nhật sau!",
-                            "Thông báo",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
+            EditPDF window = new EditPDF();
+            this.Hide();
+            window.Owner = this;
+            window.ShowDialog();
+            this.Show();
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

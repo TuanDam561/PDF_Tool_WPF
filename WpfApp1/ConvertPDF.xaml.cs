@@ -1,8 +1,4 @@
 ﻿using Microsoft.Win32;
-using Syncfusion.DocIO;
-using Syncfusion.DocIO.DLS;
-using Syncfusion.DocIORenderer;
-using Syncfusion.Pdf;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -68,113 +64,6 @@ namespace WpfApp1
 
         //Convert với libreoffice 
 
-        //private void Convert_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (_wordFiles.Count == 0)
-        //    {
-        //        MessageBox.Show("Chưa có file Word nào!");
-        //        return;
-        //    }
-
-        //    SaveFileDialog folderDialog = new SaveFileDialog
-        //    {
-        //        Title = "Chọn thư mục xuất PDF",
-        //        Filter = "Folder|*.folder",
-        //        FileName = "select",
-        //        OverwritePrompt = false,
-        //        CheckPathExists = true
-        //    };
-
-        //    if (folderDialog.ShowDialog() != true)
-        //        return;
-
-        //    string outputFolder = Path.GetDirectoryName(folderDialog.FileName)!;
-
-        //    // UI: bật process
-        //    ConvertButton.IsEnabled = false;
-        //    ConvertProgress.Visibility = Visibility.Visible;
-        //    StatusText.Visibility = Visibility.Visible;
-        //    ConvertProgress.Value = 0;
-
-        //    Thread convertThread = new Thread(() =>
-        //    {
-        //        try
-        //        {
-        //            string libreOfficePath = sofficePath!;
-        //            int total = _wordFiles.Count;
-        //            int current = 0;
-
-        //            foreach (var item in _wordFiles)
-        //            {
-        //                current++;
-
-        //                Dispatcher.Invoke(() =>
-        //                {
-        //                    StatusText.Text = $"Đang chuyển ({current}/{total}): {item.FileName}";
-        //                    ConvertProgress.Value = (double)current / total * 100;
-        //                });
-
-        //                ConvertWordToPdf(
-        //                    libreOfficePath!,
-        //                    item.FullPath,
-        //                    outputFolder
-        //                );
-        //            }
-
-        //            Dispatcher.Invoke(() =>
-        //            {
-        //                StatusText.Text = "Hoàn tất chuyển đổi!";
-        //                ConvertProgress.Value = 100;
-        //                MessageBox.Show("Chuyển đổi Word → PDF thành công!");
-        //            });
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Dispatcher.Invoke(() =>
-        //            {
-        //                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            });
-        //        }
-        //        finally
-        //        {
-        //            Dispatcher.Invoke(() =>
-        //            {
-        //                ConvertButton.IsEnabled = true;
-        //                ConvertProgress.Visibility = Visibility.Collapsed;
-        //                StatusText.Visibility = Visibility.Collapsed;
-        //            });
-        //        }
-        //    });
-
-        //    convertThread.Start();
-        //}
-
-
-
-        //private void ConvertWordToPdf(string libreOfficePath, string inputFile, string outputFolder)
-        //{
-        //    ProcessStartInfo psi = new ProcessStartInfo
-        //    {
-        //        FileName = libreOfficePath,
-        //        Arguments = $"--headless --convert-to pdf --outdir \"{outputFolder}\" \"{inputFile}\"",
-        //        CreateNoWindow = true,
-        //        UseShellExecute = false,
-        //        RedirectStandardOutput = true,
-        //        RedirectStandardError = true
-        //    };
-
-        //    using Process process = new Process();
-        //    process.StartInfo = psi;
-        //    process.Start();
-
-        //    string error = process.StandardError.ReadToEnd();
-        //    process.WaitForExit();
-
-        //    if (process.ExitCode != 0)
-        //        throw new Exception($"Lỗi convert file:\n{inputFile}\n{error}");
-        //}
-
-
         private void Convert_Click(object sender, RoutedEventArgs e)
         {
             if (_wordFiles.Count == 0)
@@ -197,6 +86,7 @@ namespace WpfApp1
 
             string outputFolder = Path.GetDirectoryName(folderDialog.FileName)!;
 
+            // UI: bật process
             ConvertButton.IsEnabled = false;
             ConvertProgress.Visibility = Visibility.Visible;
             StatusText.Visibility = Visibility.Visible;
@@ -206,6 +96,7 @@ namespace WpfApp1
             {
                 try
                 {
+                    string libreOfficePath = sofficePath!;
                     int total = _wordFiles.Count;
                     int current = 0;
 
@@ -219,7 +110,11 @@ namespace WpfApp1
                             ConvertProgress.Value = (double)current / total * 100;
                         });
 
-                        ConvertWordToPdf(item.FullPath, outputFolder);
+                        ConvertWordToPdf(
+                            libreOfficePath!,
+                            item.FullPath,
+                            outputFolder
+                        );
                     }
 
                     Dispatcher.Invoke(() =>
@@ -247,23 +142,131 @@ namespace WpfApp1
                 }
             });
 
-            convertThread.SetApartmentState(ApartmentState.STA);
             convertThread.Start();
         }
 
-        private void ConvertWordToPdf(string inputFile, string outputFolder)
+        private void ConvertWordToPdf(string libreOfficePath, string inputFile, string outputFolder)
         {
-            string outputFile = Path.Combine(
-                outputFolder,
-                Path.GetFileNameWithoutExtension(inputFile) + ".pdf"
-            );
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = libreOfficePath,
+                Arguments = $"--headless --convert-to pdf --outdir \"{outputFolder}\" \"{inputFile}\"",
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
 
-            using WordDocument document = new WordDocument(inputFile, FormatType.Automatic);
-            using DocIORenderer renderer = new DocIORenderer();
-            using PdfDocument pdf = renderer.ConvertToPDF(document);
+            using Process process = new Process();
+            process.StartInfo = psi;
+            process.Start();
 
-            pdf.Save(outputFile);
+            string error = process.StandardError.ReadToEnd();
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+                throw new Exception($"Lỗi convert file:\n{inputFile}\n{error}");
         }
+
+
+
+        //Conver với Syncfusion 
+        //private void Convert_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (_wordFiles.Count == 0)
+        //    {
+        //        MessageBox.Show("Chưa có file Word nào!");
+        //        return;
+        //    }
+
+        //    SaveFileDialog folderDialog = new SaveFileDialog
+        //    {
+        //        Title = "Chọn thư mục xuất PDF",
+        //        Filter = "Folder|*.folder",
+        //        FileName = "select",
+        //        OverwritePrompt = false,
+        //        CheckPathExists = true
+        //    };
+
+        //    if (folderDialog.ShowDialog() != true)
+        //        return;
+
+        //    string outputFolder = Path.GetDirectoryName(folderDialog.FileName)!;
+
+        //    ConvertButton.IsEnabled = false;
+        //    ConvertProgress.Visibility = Visibility.Visible;
+        //    StatusText.Visibility = Visibility.Visible;
+        //    ConvertProgress.Value = 0;
+
+        //    Thread convertThread = new Thread(() =>
+        //    {
+        //        try
+        //        {
+        //            int total = _wordFiles.Count;
+        //            int current = 0;
+
+        //            foreach (var item in _wordFiles)
+        //            {
+        //                current++;
+
+        //                Dispatcher.Invoke(() =>
+        //                {
+        //                    StatusText.Text = $"Đang chuyển ({current}/{total}): {item.FileName}";
+        //                    ConvertProgress.Value = (double)current / total * 100;
+        //                });
+
+        //                ConvertWordToPdf(item.FullPath, outputFolder);
+        //            }
+
+        //            Dispatcher.Invoke(() =>
+        //            {
+        //                StatusText.Text = "Hoàn tất chuyển đổi!";
+        //                ConvertProgress.Value = 100;
+        //                MessageBox.Show("Chuyển đổi Word → PDF thành công!");
+        //            });
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Dispatcher.Invoke(() =>
+        //            {
+        //                MessageBox.Show(ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            });
+        //        }
+        //        finally
+        //        {
+        //            Dispatcher.Invoke(() =>
+        //            {
+        //                ConvertButton.IsEnabled = true;
+        //                ConvertProgress.Visibility = Visibility.Collapsed;
+        //                StatusText.Visibility = Visibility.Collapsed;
+        //            });
+        //        }
+        //    });
+
+        //    convertThread.SetApartmentState(ApartmentState.STA);
+        //    convertThread.Start();
+        //}
+
+        //private void ConvertWordToPdf(string inputFile, string outputFolder)
+        //{
+        //    string outputFile = Path.Combine(
+        //        outputFolder,
+        //        Path.GetFileNameWithoutExtension(inputFile) + ".pdf"
+        //    );
+
+        //    using (WordDocument document = new WordDocument(inputFile, FormatType.Automatic))
+        //    {
+        //        using (DocIORenderer renderer = new DocIORenderer())
+        //        {
+        //            PdfDocument pdf = renderer.ConvertToPDF(document);
+        //            pdf.Save(outputFile);
+        //            pdf.Close(true);
+        //        }
+        //    }
+        //}
+
+
+
 
         // 🧲 Drag để sắp xếp thứ tự
         private void ListBox_MouseDown(object sender, MouseButtonEventArgs e)
