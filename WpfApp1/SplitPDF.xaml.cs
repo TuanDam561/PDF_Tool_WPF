@@ -91,12 +91,16 @@ namespace WpfApp1
             _previewTimer.Stop();
 
             var pages = ParsePages(PageInput.Text);
+
+            // 👉 Nếu không nhập gì → quay về PDF gốc
             if (pages.Count == 0)
+            {
+                ResetPreviewToOriginal();
                 return;
+            }
 
             try
             {
-                // xóa preview cũ
                 if (!string.IsNullOrEmpty(_previewPdfPath) && File.Exists(_previewPdfPath))
                     File.Delete(_previewPdfPath);
 
@@ -105,7 +109,29 @@ namespace WpfApp1
             }
             catch
             {
-                // input đang gõ dở → bỏ qua
+                // đang gõ dở → bỏ qua
+                MessageBox.Show("Lỗi nhập liệu");
+            }
+        }
+
+        private async void ResetPreviewToOriginal()
+        {
+            try
+            {
+                // Xoá preview tạm
+                if (!string.IsNullOrEmpty(_previewPdfPath) && File.Exists(_previewPdfPath))
+                {
+                    File.Delete(_previewPdfPath);
+                    _previewPdfPath = "";
+                }
+
+                await PdfViewer.EnsureCoreWebView2Async();
+                PdfViewer.Source = new Uri(_pdfPath);
+            }
+            catch
+            {
+                // ignore
+                MessageBox.Show("Lỗi reset");
             }
         }
 
