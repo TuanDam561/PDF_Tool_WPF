@@ -3,7 +3,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using WpfApp1.Functions;
-using WpfApp1.Model;
 
 namespace WpfApp1
 {
@@ -20,7 +19,7 @@ namespace WpfApp1
         private void SelectPdfA_Click(object sender, RoutedEventArgs e)
         {
             var files = FilePicker.Pick(false);
-           
+
             if (!files.Any())
             {
                 return;

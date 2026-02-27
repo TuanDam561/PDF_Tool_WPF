@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WpfApp1.EditPDF"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="PDF Editor"
+        Title="Chỉnh sửa PDF"
         Width="1200"
         Height="700"
         WindowStartupLocation="CenterScreen"

@@ -1,10 +1,11 @@
-﻿using Syncfusion.Licensing;
-using System;
+﻿using DotNetEnv;
+using PdfSharp.Fonts;
+using Syncfusion.Licensing;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
-using DotNetEnv;
 using WpfApp1.Functions;
+using WpfApp1.Utils;
 
 namespace WpfApp1
 {
@@ -46,6 +47,7 @@ namespace WpfApp1
 
             // 4️⃣ Gọi base SAU KHI license OK
             base.OnStartup(e);
+            GlobalFontSettings.FontResolver = new CustomFontResolver();
         }
 
         private void OnDispatcherUnhandledException(

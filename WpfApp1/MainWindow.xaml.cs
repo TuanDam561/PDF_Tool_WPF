@@ -75,6 +75,22 @@ namespace WpfApp1
             this.Show();
         }
 
+        private void AddwatermarkPdf_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            WatermarkPDF window = new WatermarkPDF();
+            this.Hide();
+            window.Owner = this;
+            window.ShowDialog();
+            this.Show();
+        }
+        private void ClearBG(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+           MessageBox.Show("Chức năng này đang được phát triển, vui lòng quay lại sau!",
+               "Thông báo",
+               MessageBoxButton.OK,
+               MessageBoxImage.Exclamation
+               );
+        }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();

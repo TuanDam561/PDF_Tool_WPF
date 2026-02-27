@@ -128,11 +128,40 @@ namespace WpfApp1
                         );
                     }
 
-                    Dispatcher.Invoke(() =>
+                    //Dispatcher.Invoke(() =>
+                    //{
+                    //    StatusText.Text = "Hoàn tất chuyển đổi!";
+                    //    ConvertProgress.Value = 100;
+                    //    MessageBox.Show("Chuyển đổi Word → PDF thành công!");
+                    //});
+                     Dispatcher.Invoke(() =>
                     {
                         StatusText.Text = "Hoàn tất chuyển đổi!";
                         ConvertProgress.Value = 100;
-                        MessageBox.Show("Chuyển đổi Word → PDF thành công!");
+
+                        var result = MessageBox.Show(
+                            "Chuyển đổi Word → PDF thành công!\n\nBạn có muốn mở thư mục chứa file PDF không?",
+                            "Hoàn tất",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Information
+                        );
+
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            try
+                            {
+                                System.Diagnostics.Process.Start("explorer.exe", outputFolder);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(
+                                    "Không thể mở thư mục.\n" + ex.Message,
+                                    "Lỗi",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Error
+                                );
+                            }
+                        }
                     });
                 }
                 catch (Exception ex)

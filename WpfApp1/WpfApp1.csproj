@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <None Remove=".env" />
+    <None Remove="Font\ARIAL.TTF" />
     <None Remove="Tool\qpdf\concrt140.dll" />
     <None Remove="Tool\qpdf\fix-qdf.exe" />
     <None Remove="Tool\qpdf\msvcp140.dll" />
@@ -31,6 +32,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\faviconNew.ico" />
+    <Content Include="Font\ARIAL.TTF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tool\qpdf\concrt140.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -74,15 +78,18 @@
     <PackageReference Include="DotNetEnv" Version="3.1.1" />
     <PackageReference Include="itext7" Version="9.5.0" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="9.5.0" />
-    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3800.47" />
+    <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260222" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260222" />
     <PackageReference Include="PdfiumViewer" Version="2.13.0" />
     <PackageReference Include="PdfiumViewer.Native.x86_64.v8-xfa" Version="2018.4.8.256" />
     <PackageReference Include="PDFsharp" Version="6.2.4" />
-    <PackageReference Include="Syncfusion.Licensing" Version="32.1.25" />
-    <PackageReference Include="Syncfusion.Pdf.Wpf" Version="32.1.25" />
-    <PackageReference Include="Syncfusion.PdfViewer.WPF" Version="32.1.25" />
-    <PackageReference Include="System.Drawing.Common" Version="10.0.2" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+    <PackageReference Include="Syncfusion.Licensing" Version="32.2.7" />
+    <PackageReference Include="Syncfusion.Pdf.Wpf" Version="32.2.7" />
+    <PackageReference Include="Syncfusion.PdfViewer.WPF" Version="32.2.7" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.3" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.3" />
   </ItemGroup>
 
 </Project>
