@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using WpfApp1;
 
@@ -91,9 +92,51 @@ namespace WpfApp1
                MessageBoxImage.Exclamation
                );
         }
+        private void ClearUnlockedFiles(object sender, RoutedEventArgs e)
+        {
+            string unlockedDir = Path.Combine(
+                AppContext.BaseDirectory,
+                "UnlockedFiles"
+            );
+
+            if (!Directory.Exists(unlockedDir))
+            {
+                MessageBox.Show("Không tồn tại thư mục UnlockedFiles");
+                return;
+            }
+
+            int count = 0;
+
+            foreach (var file in Directory.GetFiles(unlockedDir))
+            {
+                try
+                {
+                    File.Delete(file);
+                    count++;
+                }
+                catch { }
+            }
+
+            foreach (var dir in Directory.GetDirectories(unlockedDir))
+            {
+                try
+                {
+                    Directory.Delete(dir, true);
+                }
+                catch { }
+            }
+
+            MessageBox.Show(
+                $"Đã xóa {count} file tạm",
+                "Thông báo",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+        }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+
     }
 }

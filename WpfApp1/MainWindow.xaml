@@ -34,20 +34,54 @@
             </StackPanel>
 
             <!-- RIGHT: EXIT BUTTON -->
-            <Button Grid.Column="1"
-                    Content="✖"
-                    Width="36"
-                    Height="36"
-                    FontSize="14"
-                    FontWeight="Bold"
-                    Foreground="White"           
-                    Background="Red"
-                    BorderBrush="#CCC"
-                    BorderThickness="1"
-                    Cursor="Hand"
-                    VerticalAlignment="Top"
-                    HorizontalAlignment="Right"
-                    Click="Exit_Click"/>    
+            <!-- RIGHT BUTTONS -->
+            <StackPanel Grid.Column="1"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right">
+                <!-- Phản hồi từ người dùng -->
+                <Button Content="💌"
+                        ToolTip="Báo cáo từ người dùng"
+                        Width="36"
+                        Height="36"
+                        Margin="0,0,6,0"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Background="#57bcff"
+                        BorderBrush="#CCC"
+                        BorderThickness="1"
+                        Cursor="Hand"/> 
+                
+                <!-- Trash -->
+                <Button Content="🗑️"
+                        ToolTip="Xóa bộ nhớ"
+                        Width="36"
+                        Height="36"
+                        Margin="0,0,6,0"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Background="#c7c9c8"
+                        BorderBrush="#CCC"
+                        BorderThickness="1"
+                        Cursor="Hand"
+                        Click="ClearUnlockedFiles"/>
+
+                <!-- Close -->
+                <Button Content="✖"
+                        ToolTip="Thoát"
+                        Width="36"
+                        Height="36"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="White"
+                        Background="Red"
+                        BorderBrush="#CCC"
+                        BorderThickness="1"
+                        Cursor="Hand"
+                        Click="Exit_Click"/>
+                
+            </StackPanel>
         </Grid>
 
 
