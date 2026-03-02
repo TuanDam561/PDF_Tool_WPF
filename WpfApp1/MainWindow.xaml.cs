@@ -133,10 +133,20 @@ namespace WpfApp1
                 MessageBoxImage.Information
             );
         }
+
+        private void Feedback_Click(object sender, RoutedEventArgs e)
+        {
+            FeedbackWindow window = new FeedbackWindow();
+            this.Hide();
+            window.Owner = this;
+            window.ShowDialog();
+            this.Show();
+        }
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
+        
     }
 }

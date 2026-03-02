@@ -50,7 +50,8 @@
                         Background="#57bcff"
                         BorderBrush="#CCC"
                         BorderThickness="1"
-                        Cursor="Hand"/> 
+                        Cursor="Hand"
+                        Click="Feedback_Click"/> 
                 
                 <!-- Trash -->
                 <Button Content="🗑️"
